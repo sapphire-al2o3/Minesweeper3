@@ -9,9 +9,6 @@ let flagCount = count;
 let finish = false;
 let timer = 0;
 
-// ?x=5&y=5&z=5&m=10
-// ?x=7&y=7&z=3&m=10
-
 const tableContainer = document.getElementById('tables');
 const mineCountText = document.getElementById('mine-count');
 const timerText = document.getElementById('timer');
@@ -23,15 +20,6 @@ if (params.size > 0) {
     sizeY = parseInt(params.get('y') ?? '7', 10);
     sizeZ = parseInt(params.get('z') ?? '3', 10);
     count = parseInt(params.get('m') ?? '10', 10);
-}
-
-if (localStorage.length > 0) {
-    const key = `m_${sizeX}_${sizeY}_${sizeZ}_${count}`;
-    const json = localStorage.getItem(key);
-    if (json) {
-        const data = JSON.parse(json);
-        
-    }
 }
 
 function createTable(index) {
@@ -80,35 +68,16 @@ function hasMine(x, y, z) {
 }
 function checkCell(x, y, z) {
     let m = 0;
-    m += hasMine(x - 1, y, z);
-    m += hasMine(x + 1, y, z);
-    m += hasMine(x, y - 1, z);
-    m += hasMine(x, y + 1, z);
-    m += hasMine(x, y, z - 1);
-    m += hasMine(x, y, z + 1);
 
-    m += hasMine(x - 1, y - 1, z);
-    m += hasMine(x - 1, y + 1, z);
-    m += hasMine(x + 1, y - 1, z);
-    m += hasMine(x + 1, y + 1, z);
-    m += hasMine(x, y - 1, z - 1);
-    m += hasMine(x, y - 1, z + 1);
-    m += hasMine(x, y + 1, z - 1);
-    m += hasMine(x, y + 1, z + 1);
-    m += hasMine(x - 1, y, z - 1);
-    m += hasMine(x - 1, y, z + 1);
-    m += hasMine(x + 1, y, z - 1);
-    m += hasMine(x + 1, y, z + 1);
-
-    m += hasMine(x - 1, y - 1, z - 1);
-    m += hasMine(x - 1, y - 1, z + 1);
-    m += hasMine(x - 1, y + 1, z - 1);
-    m += hasMine(x - 1, y + 1, z + 1);
-    m += hasMine(x + 1, y - 1, z - 1);
-    m += hasMine(x + 1, y - 1, z + 1);
-    m += hasMine(x + 1, y + 1, z - 1);
-    m += hasMine(x + 1, y + 1, z + 1);
-
+    for (let i = -1; i <= 1; i++) {
+        for (let j = -1; j <= 1; j++) {
+            for (let k = -1; k <= 1; k++) {
+                if (i !== 0 || j !== 0 || k !== 0) {
+                    m += hasMine(x + k, y + j, z + i);
+                }
+            }
+        }
+    }
 
     return m;
 }
@@ -152,10 +121,9 @@ function setupMine(count) {
                     // elems[k].classList.remove('block');
                 } else {
                     cells[k].hint = checkCell(x, y, z);
-                    if (cells[k].hint > 0) {
-                        // elems[k].textContent = cells[k].hint;
-                        // cells[k] = 3;
-                    }
+                    // if (cells[k].hint > 0) {
+                    //     elems[k].textContent = cells[k].hint;
+                    // }
                 }
             }
         }
@@ -167,6 +135,40 @@ function setupMine(count) {
 }
 
 setupMine(count);
+
+function load(data) {
+    for (let z = 0; z < sizeZ; z++) {
+        for (let y = 0; y < sizeY; y++) {
+            for (let x = 0; x < sizeX; x++) {
+                let k = z * sizeX * sizeY + y * sizeX + x;
+                cells[k].hint = data.c[k].hint;
+                cells[k].mine = data.c[k].mine;
+                cells[k].flag = data.c[k].flag;
+                cells[k].block = data.c[k].block;
+                if (cells[k].flag) {
+                    elems[k].classList.add('flag');
+                    flagCount--;
+                }
+                if (!cells[k].block) {
+                    elems[k].classList.remove('block');
+                    if (cells[k].hint > 0) {
+                        elems[k].textContent = cells[k].hint;
+                    }
+                }
+            }
+        }
+    }
+}
+
+if (localStorage.length > 0) {
+    const json = localStorage.getItem(getSaveKey());
+    if (json) {
+        const data = JSON.parse(json);
+        if (data.x === sizeX && data.y === sizeY && data.z === sizeZ && data.m === count) {
+            load(data);
+        }
+    }
+}
 
 function paint(x, y, z) {
     let w = sizeX,
@@ -270,6 +272,8 @@ function clickCell(e) {
             openCell(x, y, z);
         }
 
+        save();
+
         if (prev) {
             hoverOut(x, y, z);
             hoverIn(x, y, z);
@@ -314,6 +318,8 @@ function clickFlag(e) {
             }
 
             mineCountText.textContent = flagCount;
+
+            save();
         }
 
         if (checkComplete()) {
@@ -381,13 +387,6 @@ function hoverOut(x, y, z) {
 function mouseover(e) {
     if (e.target.tagName === 'TD') {
         if (prev) {
-            // prev.classList.remove('hover');
-            // getElem(prevX - 1, prevY, prevZ)?.classList.remove('hover');
-            // getElem(prevX + 1, prevY, prevZ)?.classList.remove('hover');
-            // getElem(prevX, prevY - 1, prevZ)?.classList.remove('hover');
-            // getElem(prevX, prevY + 1, prevZ)?.classList.remove('hover');
-            // getElem(prevX, prevY, prevZ - 1)?.classList.remove('hover');
-            // getElem(prevX, prevY, prevZ + 1)?.classList.remove('hover');
 
             hoverOut(prevX, prevY, prevZ);
         }
@@ -395,15 +394,6 @@ function mouseover(e) {
         let x = parseInt(e.target.getAttribute('x'));
         let y = parseInt(e.target.getAttribute('y'));
         let z = parseInt(e.target.getAttribute('z'));
-
-        // e.target.classList.add('hover');
-
-        // getElem(x - 1, y, z)?.classList.add('hover');
-        // getElem(x + 1, y, z)?.classList.add('hover');
-        // getElem(x, y - 1, z)?.classList.add('hover');
-        // getElem(x, y + 1, z)?.classList.add('hover');
-        // getElem(x, y, z - 1)?.classList.add('hover');
-        // getElem(x, y, z + 1)?.classList.add('hover');
 
         hoverIn(x, y, z);
 
@@ -418,13 +408,6 @@ function mouseout(e) {
     if (e.target.tagName === 'TD') {
 
         if (prev) {
-            // prev.classList.remove('hover');
-            // getElem(prevX - 1, prevY, prevZ)?.classList.remove('hover');
-            // getElem(prevX + 1, prevY, prevZ)?.classList.remove('hover');
-            // getElem(prevX, prevY - 1, prevZ)?.classList.remove('hover');
-            // getElem(prevX, prevY + 1, prevZ)?.classList.remove('hover');
-            // getElem(prevX, prevY, prevZ - 1)?.classList.remove('hover');
-            // getElem(prevX, prevY, prevZ + 1)?.classList.remove('hover');
 
             hoverOut(prevX, prevY, prevZ);
         }
@@ -475,6 +458,8 @@ document.getElementById('reset').addEventListener('click', e => {
 
     clearInterval(timer);
     timer = 0;
+
+    remove();
 }, false);
 
 function startTimer() {
@@ -494,16 +479,25 @@ function startTimer() {
     }, 500);
 }
 
+function getSaveKey() {
+    const key = `mine_${sizeX}_${sizeY}_${sizeZ}_${count}`;
+    return key;
+}
+
 function save() {
     const data = {
         x: sizeX,
         y: sizeY,
         z: sizeZ,
         m: count,
-        cells: cells
+        c: cells
     };
-    const key = `m_${sizeX}_${sizeY}_${sizeZ}_${count}`;
-    localStorage.setItem('key', JSON.stringify(data));
+    
+    localStorage.setItem(getSaveKey(), JSON.stringify(data));
+}
+
+function remove() {
+    localStorage.removeItem(getSaveKey());
 }
 
 document.getElementById('save')?.addEventListener('click', e => {
