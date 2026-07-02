@@ -197,34 +197,16 @@ function paint(x, y, z) {
             if (cells[k].hint > 0) {
                 elems[k].textContent = cells[k].hint;
             } else if(!cells[k].mine) {
-                f(x - 1, y, z);
-                f(x + 1, y, z);
-                f(x, y - 1, z);
-                f(x, y + 1, z);
-                f(x, y, z - 1);
-                f(x, y, z + 1);
 
-                f(x - 1, y - 1, z);
-                f(x - 1, y + 1, z);
-                f(x + 1, y - 1, z);
-                f(x + 1, y + 1, z);
-                f(x, y - 1, z - 1);
-                f(x, y - 1, z + 1);
-                f(x, y + 1, z - 1);
-                f(x, y + 1, z + 1);
-                f(x - 1, y, z - 1);
-                f(x - 1, y, z + 1);
-                f(x + 1, y, z - 1);
-                f(x + 1, y, z + 1);
-
-                f(x - 1, y - 1, z - 1);
-                f(x - 1, y - 1, z + 1);
-                f(x - 1, y + 1, z - 1);
-                f(x - 1, y + 1, z + 1);
-                f(x + 1, y - 1, z - 1);
-                f(x + 1, y - 1, z + 1);
-                f(x + 1, y + 1, z - 1);
-                f(x + 1, y + 1, z + 1);
+                for (let i = -1; i <= 1; i++) {
+                    for (let j = -1; j <= 1; j++) {
+                        for (let k = -1; k <= 1; k++) {
+                            if (i !== 0 || j !== 0 || k !== 0) {
+                                f(x + k, y + j, z + i);
+                            }
+                        }
+                    }
+                }
             }
         }
     })(x, y, z);
@@ -499,7 +481,3 @@ function save() {
 function remove() {
     localStorage.removeItem(getSaveKey());
 }
-
-document.getElementById('save')?.addEventListener('click', e => {
-    save();
-}, false);
