@@ -1,6 +1,7 @@
 body {
     text-align: center;
     font-family: "Noto Sans JP";
+    margin: 0;
 }
 
 div {
@@ -11,7 +12,9 @@ div {
 .header {
     display: flex;
     position: sticky;
-    top: 12px;
+    top: 0px;
+    /* background-color: rgb(0 0 0 / 0.2); */
+    color: #000;
 }
 
 #mine-count {
@@ -135,4 +138,5 @@ td.hover {
 
 .back {
     margin-top: 24px;
+    margin-bottom: 24px;
 }
