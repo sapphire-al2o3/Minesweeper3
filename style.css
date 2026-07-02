@@ -132,3 +132,7 @@ td.hover {
     /* text-decoration: none; */
     color: #000;
 }
+
+.back {
+    margin-top: 24px;
+}
