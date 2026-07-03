@@ -17,7 +17,16 @@
                 <p><a href="index.html?x=7&y=7&z=3&m=10">7x7x3</a></p>
                 <p><a href="index.html?x=7&y=7&z=4&m=20">7x7x4</a></p>
                 <p><a href="index.html?x=10&y=10&z=3&m=30">10x10x3</a></p>
+                <p id="custom">Custom</p>
+                <form id="custom_form">
+                    <p><label>X</label><input type="number" id="sizeX" min="3" max="12" value="5"></p>
+                    <p><label>Y</label><input type="number" id="sizeY" min="3" max="12" value="5"></p>
+                    <p><label>Z</label><input type="number" id="sizeZ" min="0" max="12" value="5"></p>
+                    <p><label>Mine</label><input type="number" id="count" min="1" max="99" value="10"></p>
+                    <p><a href="index.html" id="play">PLAY</a></p>
+                </form>
             </div>
         </div>
+        <script type="text/javascript" src="menu.js"></script>
     </body>
 </html>

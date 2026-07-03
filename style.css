@@ -140,3 +140,26 @@ td.hover {
     margin-top: 24px;
     margin-bottom: 24px;
 }
+
+.menu label {
+    display: inline-block;
+    width: 64px;
+    font-weight: bold;
+    font-size: 20px;
+}
+
+#custom {
+    cursor: pointer;
+}
+
+#custom_form {
+    display: none;
+}
+
+#custom_form input {
+    vertical-align: middle;
+}
+
+.show {
+    display: block;
+}
