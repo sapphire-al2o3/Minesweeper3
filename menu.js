@@ -4,11 +4,12 @@ const z = document.getElementById('sizeZ');
 const m = document.getElementById('count');
 
 const form = document.getElementById('custom_form');
+const play = document.getElementById('play');
 
 document.getElementById('custom').addEventListener('click', e => {
     form.classList.toggle('show');
 }, false);
 
-document.getElementById('play').addEventListener('click', e => {
-    document.getElementById('play').href = `./index.html?x=${x.value}&y=${y.value}&z=${z.value}&m=${m.value}`;
+play.addEventListener('click', e => {
+    play.href = `./index.html?x=${x.value}&y=${y.value}&z=${z.value}&m=${m.value}`;
 }, false);
