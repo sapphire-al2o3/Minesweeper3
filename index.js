@@ -158,6 +158,7 @@ function load(data) {
             }
         }
     }
+    mineCountText.textContent = flagCount;
 }
 
 if (localStorage.length > 0) {
