@@ -141,6 +141,10 @@ td.hover {
     margin-bottom: 24px;
 }
 
+.back a {
+    color: #000;
+}
+
 .menu label {
     display: inline-block;
     width: 64px;
