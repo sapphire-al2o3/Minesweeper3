@@ -10,7 +10,7 @@ let finish = false;
 let timer = 0;
 
 const tableContainer = document.getElementById('tables');
-const mineCountText = document.getElementById('mine-count');
+const flagCountText = document.getElementById('flag-count');
 const timerText = document.getElementById('timer');
 
 let params = new URLSearchParams(document.location.search);
@@ -130,7 +130,7 @@ function setupMine(count) {
     }
 
     flagCount = count;
-    mineCountText.textContent = count;
+    flagCountText.textContent = count;
     timerText.textContent = 0;
 }
 
@@ -158,7 +158,7 @@ function load(data) {
             }
         }
     }
-    mineCountText.textContent = flagCount;
+    flagCountText.textContent = flagCount;
 }
 
 if (localStorage.length > 0) {
@@ -300,7 +300,7 @@ function clickFlag(e) {
                 flagCount--;
             }
 
-            mineCountText.textContent = flagCount;
+            flagCountText.textContent = flagCount;
 
             save();
         }
