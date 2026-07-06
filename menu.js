@@ -11,5 +11,5 @@ document.getElementById('custom').addEventListener('click', e => {
 }, false);
 
 play.addEventListener('click', e => {
-    play.href = `./index.html?x=${x.value}&y=${y.value}&z=${z.value}&m=${m.value}`;
+    play.href = `./game.html?x=${x.value}&y=${y.value}&z=${z.value}&m=${m.value}`;
 }, false);
