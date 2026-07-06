@@ -18,7 +18,7 @@ div {
     pointer-events: none;
 }
 
-#mine-count {
+#flag-count {
     text-align: left;
     font-weight: bold;
     font-size: 24px;
