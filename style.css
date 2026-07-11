@@ -2,6 +2,7 @@ body {
     text-align: center;
     font-family: "Noto Sans JP";
     margin: 0;
+    background: url("./background.png");
 }
 
 div {
