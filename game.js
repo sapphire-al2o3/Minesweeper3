@@ -130,7 +130,7 @@ function setupMine(count) {
     }
 
     flagCount = count;
-    flagCountText.textContent = count;
+    flagCountText.textContent = `${flagCount}/${count}`;
     timerText.textContent = 0;
 }
 
@@ -158,7 +158,7 @@ function load(data) {
             }
         }
     }
-    flagCountText.textContent = flagCount;
+    flagCountText.textContent = `${flagCount}/${count}`;
 }
 
 if (localStorage.length > 0) {
@@ -300,7 +300,7 @@ function clickFlag(e) {
                 flagCount--;
             }
 
-            flagCountText.textContent = flagCount;
+            flagCountText.textContent = `${flagCount}/${count}`;
 
             save();
         }
