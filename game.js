@@ -349,6 +349,9 @@ function hoverIn(x, y, z) {
                     if (c !== null && c.block) {
                         getElem(x + k, y + j, z + i)?.classList.add('hover');
                     }
+                    if (c !== null && !c.block && j === 0 && k === 0) {
+                        getElem(x + k, y + j, z + i)?.classList.add('hover2');
+                    }
                 }
             }
         }
@@ -361,6 +364,9 @@ function hoverOut(x, y, z) {
             for (let k = -1; k <= 1; k++) {
                 if (i !== 0 || j !== 0 || k !== 0) {
                     getElem(x + k, y + j, z + i)?.classList.remove('hover');
+                }
+                if (j === 0 && k === 0) {
+                    getElem(x + k, y + j, z + i)?.classList.remove('hover2');
                 }
             }
         }
