@@ -145,6 +145,7 @@ td.hover2 {
 .back {
     margin-top: 24px;
     margin-bottom: 24px;
+    font-weight: bold;
 }
 
 .back a {
