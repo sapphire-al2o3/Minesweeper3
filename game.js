@@ -8,10 +8,40 @@ let count = 10;
 let flagCount = count;
 let finish = false;
 let timer = 0;
+let seed = Date.now();
 
 const tableContainer = document.getElementById('tables');
 const flagCountText = document.getElementById('flag-count');
 const timerText = document.getElementById('timer');
+
+class Xor128 {
+    constructor() {
+        if (arguments.length > 0) {
+            let a = [],
+                s = arguments[0];
+            for (let i = 1; i <= 4; i++) {
+                a[i - 1] = s = 1812433253 * (s ^ (s >> 30)) + i;
+            }
+            this.x = a[0];
+            this.y = a[1];
+            this.z = a[2];
+            this.w = a[3];
+        } else {
+            this.x = 1812433254;
+            this.y = 3713160357;
+            this.z = 3109174145;
+            this.w = 64984499;
+        }
+    }
+    rand() {
+        const t = this.x ^ (this.x << 11);
+        this.x = this.y;
+        this.y = this.z;
+        this.z = this.w;
+        this.w = this.w ^ (this.x >> 19) ^ (t ^ (t >> 8));
+        return this.w / 0xFFFFFFFF + 0.5;
+    }
+}
 
 let params = new URLSearchParams(document.location.search);
 
@@ -20,7 +50,12 @@ if (params.size > 0) {
     sizeY = parseInt(params.get('y') ?? '7', 10);
     sizeZ = parseInt(params.get('z') ?? '3', 10);
     count = parseInt(params.get('m') ?? '10', 10);
+    if (params.get('s')) {
+        seed = parseInt(params.get('s'), 10);
+    }
 }
+
+const xor128 = new Xor128(seed);
 
 function createTable(index) {
     let k = index * sizeX * sizeY;
@@ -56,7 +91,8 @@ for (let i = 0; i < sizeZ; i++) {
 }
 
 function rand(n) {
-    return Math.random() * n ^ 0;
+    // return Math.random() * n ^ 0;
+    return xor128.rand() * n ^ 0;
 }
 
 function hasMine(x, y, z) {
